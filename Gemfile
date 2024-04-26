@@ -54,4 +54,4 @@ group :development do
   # gem "spring"
 end
 
-gem "mongoid", "~> 8.1"
+gem 'mongoid', '~> 8.1', '>= 8.1.5'
