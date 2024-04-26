@@ -1,0 +1,7 @@
+.mx-auto.w-full[class='md:w-2/3']
+  h1.font-bold.text-4xl
+    | New project
+
+  = render 'form', project: @project
+
+  = link_to 'Back to projects', organization_projects_path(@organization), class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'

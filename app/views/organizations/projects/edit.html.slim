@@ -1,0 +1,8 @@
+.mx-auto.w-full[class='md:w-2/3']
+  .font-bold.text-4xl
+    | Editing project
+
+  = render 'form', project: @project
+
+  = link_to 'Show this project', organization_project_path(@organization, @project), class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+  = link_to 'Back to projects', organization_projects_path, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'

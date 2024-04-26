@@ -1,0 +1,15 @@
+require:
+  - rubocop-rails
+
+AllCops:
+  NewCops: enable
+  TargetRubyVersion: 3.3.0
+  Exclude:
+    - 'bin/*'
+    - 'config/**/*'
+    - 'vendor/**/*'
+    - 'config.ru'
+    - 'Rakefile'
+
+Style/Documentation:
+  Enabled: false

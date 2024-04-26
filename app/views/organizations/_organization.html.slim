@@ -1,0 +1,10 @@
+div id="#{dom_id organization}"
+  p.my-5
+    strong.block.font-medium.mb-1
+      | Name:
+    = organization.name
+
+  - if action_name != 'show'
+    = link_to 'Show this organization', organization, class: 'rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+    = link_to 'Edit this organization', edit_organization_path(organization), class: 'rounded-lg py-3 ml-2 px-5 bg-gray-100 inline-block font-medium'
+    hr.mt-6

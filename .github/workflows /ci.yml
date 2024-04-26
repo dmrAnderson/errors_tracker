@@ -1,0 +1,31 @@
+# This workflow uses actions that are not certified by GitHub.  They are
+# provided by a third-party and are governed by separate terms of service,
+# privacy policy, and support documentation.
+#
+# This workflow will install a prebuilt Ruby version, install dependencies, and
+# run tests and linters.
+
+name: 'CI'
+
+on: [pull_request]
+
+jobs:
+  linters:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Checkout code'
+        uses: actions/checkout@v4.1.1
+      - name: 'Install Ruby and gems'
+        uses: ruby/setup-ruby@v1.173.0
+        with:
+          bundler-cache: true
+      - name: 'Check Security quality'
+        run: bin/bundle exec rake brakeman
+      - name: 'Run Importmap audit'
+        run: bin/importmap audit
+      - name: 'Check Codebase quality'
+        run: bin/bundle exec rubocop
+      - name: 'Check Translations quality'
+        run: bin/bundle exec i18n-tasks health
+      - name: 'Check Slim quality'
+        run: bin/bundle exec slim-lint app/views
