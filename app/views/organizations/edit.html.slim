@@ -1,8 +1,10 @@
-.mx-auto.w-full[class='md:w-2/3']
-  .font-bold.text-4xl
-    | Editing organization
+nav[aria-label='breadcrumb']
+  ul
+    li
+      = link_to 'Organizations', organizations_path, title: 'Back to organizations'
+    li
+      = link_to @organization.name, @organization, title: 'Show this organization'
+    li
+      | Editing organization
 
-  = render 'form', organization: @organization
-
-  = link_to 'Show this organization', @organization, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
-  = link_to 'Back to organizations', organizations_path, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+= render 'form', organization: @organization

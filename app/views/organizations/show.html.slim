@@ -1,12 +1,32 @@
-.mx-auto.w-full.flex[class='md:w-2/3']
-  .mx-auto
-    - if notice.present?
-      p.py-2.px-3.bg-green-50.mb-5.text-green-500.font-medium.rounded-lg.inline-block#notice
-        = notice
+- if notice.present?
+  ins
+    = notice
 
-    = render @organization
+nav[aria-label='breadcrumb']
+  ul
+    li
+      = link_to 'Organizations', organizations_path, title: 'Back to organizations'
+    li
+      = @organization.name
+article
+  header
+    nav
+      ul
+        li
+          strong
+            | Name:
+          =< @organization.name
+      ul
+        li
+          = link_to 'Edit this organization', edit_organization_path(@organization)
+  ul
+    - @organization.projects.each do |project|
+      li
+        = project.name
+  footer
+    small
+      strong
+        | Created at:
+      =< human_date(@organization.created_at)
 
-    = link_to 'Edit this organization', edit_organization_path(@organization), class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
-    .inline-block.ml-2
-      = button_to 'Destroy this organization', organization_path(@organization), method: :delete, class: 'mt-2 rounded-lg py-3 px-5 bg-gray-100 font-medium'
-    = link_to 'Back to organizations', organizations_path, class: 'ml-2 rounded-lg py-3 px-5 bg-gray-100 inline-block font-medium'
+= button_to 'Destroy this organization', organization_path(@organization), method: :delete, data: { turbo_confirm: 'Are you sure?' }

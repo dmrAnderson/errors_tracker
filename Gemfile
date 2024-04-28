@@ -45,10 +45,10 @@ group :development, :test do
   gem 'debug', platforms: %i[mri windows]
 
   gem 'brakeman', require: false
+  gem 'i18n-tasks', require: false
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false
   gem 'slim_lint', require: false
-  gem 'i18n-tasks', require: false
 end
 
 group :development do
