@@ -1,13 +1,14 @@
-- if notice.present?
-  ins
-    = notice
-
 nav[aria-label='breadcrumb']
   ul
     li
       = link_to 'Organizations', organizations_path, title: 'Back to organizations'
     li
       = @organization.name
+
+- if notice.present?
+  ins
+    = notice
+
 article
   header
     nav
@@ -19,10 +20,14 @@ article
       ul
         li
           = link_to 'Edit this organization', edit_organization_path(@organization)
-  ul
-    - @organization.projects.each do |project|
+  nav
+    ul
       li
-        = project.name
+        strong
+          | Projects
+    ul
+      li
+        = link_to '→', organization_projects_path(@organization), title: 'View projects'
   footer
     small
       strong

@@ -6,7 +6,7 @@ module Organizations
     before_action :set_project, only: %i[show edit update destroy]
 
     def index
-      @projects = Project.all
+      @projects = Project.where(organization: @organization)
     end
 
     def show; end

@@ -1,12 +1,13 @@
-.w-full
-  - if notice.present?
-    p.py-2.px-3.bg-green-50.mb-5.text-green-500.font-medium.rounded-lg.inline-block#notice
-      = notice
-
-  .flex.justify-between.items-center
-    h1.font-bold.text-4xl
+nav
+  ul
+    li
       | Projects
-    = link_to 'New project', new_organization_project_path(@organization), class: 'rounded-lg py-3 px-5 bg-blue-600 text-white block font-medium'
+  ul
+    li
+      = link_to 'New project', new_organization_project_path(@organization)
 
-  .min-w-full#projects
-    = render @projects
+- if notice.present?
+  ins
+    = notice
+
+= render @projects
