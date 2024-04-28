@@ -6,8 +6,4 @@ nav
     li
       = link_to 'New project', new_organization_project_path(@organization)
 
-- if notice.present?
-  ins
-    = notice
-
 = render @projects

@@ -17,5 +17,8 @@ html[lang=I18n.locale]
           li
             h1
               | Errors Tracker
+      - if notice.present?
+        ins
+          = notice
       hr
       = yield
