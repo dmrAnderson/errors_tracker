@@ -5,6 +5,7 @@ class Project
   include Mongoid::Timestamps
 
   field :name, type: String
+  validates :name, presence: true, uniqueness: { scope: :organization_id}
 
   belongs_to :organization
 end
