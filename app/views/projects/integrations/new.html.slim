@@ -1,0 +1,11 @@
+nav[aria-label='breadcrumb']
+  ul
+    li
+      = link_to 'Projects', organization_projects_path(@project.organization), title: 'Back to projects'
+    li
+      = link_to @project.name, organization_project_path(@project.organization, @project), title: 'Show this project'
+    li
+      | New integration
+
+
+= render 'form', integration: @integration

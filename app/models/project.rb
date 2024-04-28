@@ -8,4 +8,6 @@ class Project
   validates :name, presence: true, uniqueness: { scope: :organization_id }
 
   belongs_to :organization
+
+  has_many :integrations, dependent: :delete_all
 end

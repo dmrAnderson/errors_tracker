@@ -16,18 +16,46 @@ article
       ul
         li
           = link_to 'Edit this project', edit_organization_project_path(@organization, @project)
-  nav
-    ul
-      li
-        strong
-          | Integrations
-    ul
-      li
-        = link_to '→', 'organization_projects_path(@organization)', title: 'View Integrations'
-  footer
-    small
-      strong
-        | Created at:
-      =< human_date(@project.created_at)
+  small
+    strong
+      | Created at:
+    =< human_date(@project.created_at)
 
 = button_to 'Destroy this project', organization_path(@organization), method: :delete, data: { turbo_confirm: 'Are you sure?' }
+
+nav
+  ul
+    li
+      | Integrations
+  ul
+    li
+      = link_to 'New integrations', new_project_integration_path(@project)
+hr
+aside
+  nav
+    ul
+      - @project.integrations.each do |integration|
+        li
+          details
+            summary
+              strong
+                = integration.name
+              br
+              small
+                u
+                  = integration.origin
+              - if integration.confirmed_at?
+                ins
+                  sup
+                    |< +
+              - else
+                sub
+                  |< -
+            article
+              | TODO
+              footer
+                - if integration.confirmed_at?
+                  = button_to 'Reconfirm this integration', confirmation_path(integration), method: :patch
+                - else
+                  = button_to 'Confirm this integration', integration_confirmations_path(integration), method: :post
+            = button_to 'Destroy this integration', integration, method: :delete, data: { turbo_confirm: 'Are you sure?' }

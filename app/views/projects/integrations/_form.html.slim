@@ -1,0 +1,17 @@
+= form_with(model: [integration.project, integration]) do |form|
+  - if form.object.errors.any?
+    h2
+      | "#{pluralize(form.object.errors.count, 'error')} prohibited this project from being saved:
+    ul
+      - form.object.errors.each do |error|
+        li
+          = error.full_message
+
+  div
+    = form.label :name
+    = form.text_field :name
+  div
+    = form.label :origin
+    = form.url_field :origin
+
+  = form.submit
