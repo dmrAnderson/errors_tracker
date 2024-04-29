@@ -7,5 +7,14 @@ class Organization
   field :name, type: String
   validates :name, presence: true, uniqueness: true
 
-  has_many :projects, dependent: :delete_all
+  field :origin, type: String
+  validates :name, presence: true, uniqueness: true
+
+  field :origin_confirmed_at, type: Time
+  field :public_secret, type: String
+
+  with_options dependent: :delete_all do
+    has_many :projects
+    has_many :outbound_webhook
+  end
 end

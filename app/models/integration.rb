@@ -14,6 +14,7 @@ class Integration
 
   field :public_secret, type: String
 
+  belongs_to :organization
   belongs_to :project
 
   has_many :logs, dependent: :delete_all

@@ -1,0 +1,47 @@
+nav
+  ul
+    li
+      | Webhooks
+  ul
+    li
+      = form_for organization_logs_path(@organization), method: :get, html: { role: 'search' } do |form|
+        = form.search_field :search, placeholder: 'Search...'
+        = form.submit 'Search'
+    li
+      = form_for organization_logs_path(@organization), method: :get do |form|
+        fieldset[role='group']
+          = form.select :project, @organization.projects.pluck(:name), placeholder: 'Project'
+          = form.submit 'Search'
+- @outbound_webhooks.each do |outbound_webhook|
+  article
+    header
+      nav
+        ul
+          li
+            strong
+              = outbound_webhook.kind
+        ul
+          li
+            ins
+              = time_ago_in_words(outbound_webhook.last_send_at)
+    details
+      summary
+        = outbound_webhook.status
+      blockquote
+        - outbound_webhook.body.to_a.each do |line|
+          p
+            strong
+              = line.fetch(0)
+            small
+              =< line.fetch(1)
+          hr
+        footer
+          cite
+            strong
+              = outbound_webhook.last_response_code
+            br
+            = outbound_webhook.last_response_body
+            / = time_ago_in_words(outbound_webhook.last_send_at)
+    footer
+      small
+        = human_date(outbound_webhook.created_at)

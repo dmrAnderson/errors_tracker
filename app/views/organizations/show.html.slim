@@ -32,10 +32,33 @@ article
     ul
       li
         = link_to '→', organization_logs_path(@organization), title: 'View projects'
+  nav
+    ul
+      li
+        strong
+          | Webhooks
+    ul
+      li
+        = link_to '→', organization_webhooks_path(@organization), title: 'View webhooks'
   footer
     small
       strong
         | Created at:
       =< human_date(@organization.created_at)
+    br
+    u
+      = @organization.origin
+    - if @organization.origin_confirmed_at?
+      ins
+        sup
+          |< +
+    - else
+      sub
+        |< -
+    - if @organization.origin_confirmed_at?
+      strong
+        = @organization.public_secret
+    - else
+      = button_to 'Confirm this Organization', organization_confirmations_path(@organization), method: :post
 
 = button_to 'Destroy this organization', organization_path(@organization), method: :delete, data: { turbo_confirm: 'Are you sure?' }

@@ -25,7 +25,7 @@ module Api
 
         def integration
           authenticate_with_http_token do |token, _options|
-            Integration.where.not(confirmed_at: nil).find_by(public_secret: token)
+            Integration.where.not(confirmed_at: nil).find_by!(public_secret: token)
           end
         end
         alias authenticate_token integration

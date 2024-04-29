@@ -5,6 +5,8 @@ Rails.application.routes.draw do
     scope module: 'organizations' do
       resources :projects
       resources :logs, only: %i[index]
+      resources :webhooks, only: %i[index]
+      resources :confirmations, only: %i[create]
     end
   end
 

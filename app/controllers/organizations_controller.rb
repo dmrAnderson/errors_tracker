@@ -27,6 +27,7 @@ class OrganizationsController < ApplicationController
 
   def update
     if @organization.update(organization_params)
+      OutboundWebhookJob.perform_now(@organization.id.to_s, @organization.attributes, controller_name, action_name)
       redirect_to @organization, notice: 'Organization was successfully updated.', status: :see_other
     else
       render :edit, status: :unprocessable_entity
@@ -45,6 +46,6 @@ class OrganizationsController < ApplicationController
   end
 
   def organization_params
-    params.require(:organization).permit(:name)
+    params.require(:organization).permit(:name, :origin)
   end
 end

@@ -22,6 +22,7 @@ module Organizations
       @project.organization = @organization
 
       if @project.save
+        OutboundWebhookJob.perform_now(@project.organization.id.to_s, @project.attributes, controller_name, action_name)
         redirect_to organization_project_path(@organization, @project), notice: 'Project was successfully created.'
       else
         render :new, status: :unprocessable_entity
@@ -30,6 +31,7 @@ module Organizations
 
     def update
       if @project.update(project_params)
+        OutboundWebhookJob.perform_now(@project.organization.id.to_s, @project.attributes, controller_name, action_name)
         redirect_to organization_project_path(@organization, @project), notice: 'Project was successfully updated.',
                                                                         status: :see_other
       else
@@ -39,6 +41,7 @@ module Organizations
 
     def destroy
       @project.destroy!
+      OutboundWebhookJob.perform_now(@project.organization.id.to_s, @project.attributes, controller_name, action_name)
       redirect_to organization_projects_path(@organization), notice: 'Project was successfully destroyed.',
                                                              status: :see_other
     end

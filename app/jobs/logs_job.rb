@@ -3,6 +3,8 @@
 class LogsJob < ApplicationJob
   queue_as :default
 
+  discard_on Mongoid::Errors::DocumentNotFound
+
   def perform(inbound_webhook_id, integration_id)
     inbound_webhook = InboundWebhook.find(inbound_webhook_id)
     integration = Integration.find(integration_id)

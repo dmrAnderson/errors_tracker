@@ -21,7 +21,7 @@ article
       | Created at:
     =< human_date(@project.created_at)
 
-= button_to 'Destroy this project', organization_path(@organization), method: :delete, data: { turbo_confirm: 'Are you sure?' }
+= button_to 'Destroy this project', organization_project_path(@organization, @project), method: :delete, data: { turbo_confirm: 'Are you sure?' }
 
 nav
   ul

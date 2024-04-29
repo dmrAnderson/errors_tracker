@@ -4,9 +4,9 @@ class InboundWebhook
   include Mongoid::Document
   include Mongoid::Timestamps
 
-  PENDING = 10
-  PROCESSED = 20
-  ERROR = 30
+  PENDING = 'pending'
+  PROCESSED = 'processed'
+  ERROR = 'error'
   STATUSES = [PENDING, PROCESSED, ERROR].freeze
 
   field :status, type: String, default: PENDING
