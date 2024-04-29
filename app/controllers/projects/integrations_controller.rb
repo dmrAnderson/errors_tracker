@@ -23,7 +23,8 @@ module Projects
       @integration.organization = @project.organization
 
       if @integration.save
-        OutboundWebhookJob.perform_now(@integration.organization.id.to_s, @integration.attributes, controller_name, action_name)
+        OutboundWebhookJob.perform_now(@integration.organization.id.to_s, @integration.attributes, controller_name,
+                                       action_name)
         redirect_to organization_project_path(@project.organization, @project),
                     notice: 'Integration was successfully created.'
       else
@@ -33,7 +34,8 @@ module Projects
 
     def update
       if @integration.update(integration_params)
-        OutboundWebhookJob.perform_now(@integration.organization.id.to_s, @integration.attributes, controller_name, action_name)
+        OutboundWebhookJob.perform_now(@integration.organization.id.to_s, @integration.attributes, controller_name,
+                                       action_name)
         redirect_to project_project_path(@integration, @integration), notice: 'Integration was successfully updated.',
                                                                       status: :see_other
       else
@@ -43,7 +45,8 @@ module Projects
 
     def destroy
       integration = Integration.find(params.require(:id))
-      OutboundWebhookJob.perform_now(integration.organization.id.to_s, integration.attributes, controller_name, action_name)
+      OutboundWebhookJob.perform_now(integration.organization.id.to_s, integration.attributes, controller_name,
+                                     action_name)
       integration.destroy!
       redirect_back(
         fallback_location: organization_project_path(integration.project),

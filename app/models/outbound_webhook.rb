@@ -6,18 +6,17 @@ class OutboundWebhook
 
   PENDING = 'pending'
   PROCESSED = 'processed'
+  OMITTED = 'omitted'
   ERROR = 'error'
-  STATUSES = [PENDING, PROCESSED, ERROR].freeze
 
   field :status, type: String, default: PENDING
 
-  field :last_send_at, type: Time
+  field :last_sent_at, type: Time
 
   field :kind, type: String
   validates :kind, presence: true
 
   field :last_response_code, type: Integer
-  field :last_response_body, type: String
 
   field :body, type: Hash
   validates :body, presence: true
@@ -33,7 +32,7 @@ class OutboundWebhook
       url = URI::Generic.build(parts_of_url).to_s.freeze
     rescue ArgumentError, InvalidComponentError => e
       warn(e.message, e.class, uplevel: 1)
-      update!(status: ERROR, last_send_at: Time.current)
+      update!(status: ERROR, last_sent_at: Time.current)
     else
       uri = URI(url)
       Net::HTTP.start(uri.host) do |http|
@@ -44,14 +43,18 @@ class OutboundWebhook
         request['Accept'] = 'application/json'
         request['User-Agent'] = 'rails_webhook_system/1.0'
         request['Authorization'] = "Bearer #{organization.public_secret}"
+        request['X-Rails-Webhook-Gap'] = OutboundWebhookJob::GAP_TIME
+        time = organization.sent_last_webhook_at + OutboundWebhookJob::GAP_TIME
+        request['X-Rails-Webhook-Gap-Until'] = time.iso8601
+
         request.body = { event: kind, body: }.to_json
 
         response = http.request(request)
 
-        if response.code.to_i == 310
-          update!(status: PROCESSED, last_send_at: Time.current, last_response_code: response.code, last_response_body: response.body)
+        if response.code.to_i == 200
+          update!(status: PROCESSED, last_sent_at: Time.current, last_response_code: response.code)
         else
-          update!(status: ERROR, last_send_at: Time.current, last_response_code: response.code, last_response_body: response.body)
+          update!(status: ERROR, last_sent_at: Time.current, last_response_code: response.code)
         end
       end
     end

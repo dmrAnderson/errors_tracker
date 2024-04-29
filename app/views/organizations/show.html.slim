@@ -45,20 +45,22 @@ article
       strong
         | Created at:
       =< human_date(@organization.created_at)
-    br
-    u
-      = @organization.origin
-    - if @organization.origin_confirmed_at?
-      ins
-        sup
-          |< +
-    - else
-      sub
-        |< -
-    - if @organization.origin_confirmed_at?
-      strong
-        = @organization.public_secret
-    - else
-      = button_to 'Confirm this Organization', organization_confirmations_path(@organization), method: :post
+    - if @organization.origin?
+      br
+      u
+        = @organization.origin
+      - if @organization.origin_confirmed_at?
+        ins
+          sup
+            |< +
+      - else
+        sub
+          |< -
+      - if @organization.origin_confirmed_at?
+        br
+        strong
+          = @organization.public_secret
+      - else
+        = button_to 'Confirm this Organization', organization_confirmations_path(@organization), method: :post
 
 = button_to 'Destroy this organization', organization_path(@organization), method: :delete, data: { turbo_confirm: 'Are you sure?' }

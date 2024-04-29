@@ -23,7 +23,7 @@ nav
         ul
           li
             ins
-              = time_ago_in_words(outbound_webhook.last_send_at)
+              = outbound_webhook.last_sent_at? ? time_ago_in_words(outbound_webhook.last_sent_at) : 'Never'
     details
       summary
         = outbound_webhook.status
@@ -37,11 +37,7 @@ nav
           hr
         footer
           cite
-            strong
-              = outbound_webhook.last_response_code
-            br
-            = outbound_webhook.last_response_body
-            / = time_ago_in_words(outbound_webhook.last_send_at)
+            = outbound_webhook.last_response_code
     footer
       small
         = human_date(outbound_webhook.created_at)

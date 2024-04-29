@@ -2,10 +2,9 @@
 
 module ApplicationHelper
   NAME = 'COAX'
-  ORIGIN = 'https://www.google.com/'
 
   def current_organization
-    @current_organization ||= Organization.find_or_create_by!(name: NAME, origin: ORIGIN)
+    @current_organization ||= Organization.find_or_create_by!(name: NAME)
   end
 
   def human_date(date)
