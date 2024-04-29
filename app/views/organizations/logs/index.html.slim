@@ -1,0 +1,20 @@
+nav
+  ul
+    li
+      | Logs
+  ul
+    li
+      = form_for organization_logs_path(@organization), method: :get, html: { role: 'search' } do |form|
+        = form.search_field :search, placeholder: 'Search...'
+        = form.submit 'Search'
+    li
+      = form_for organization_logs_path(@organization), method: :get do |form|
+        fieldset[role='group']
+          = form.select :project, @organization.projects.pluck(:name), placeholder: 'Project'
+          = form.submit 'Search'
+- @logs.each do |log|
+  article
+    = log.body
+    footer
+      small
+        = time_ago_in_words(log.created_at)

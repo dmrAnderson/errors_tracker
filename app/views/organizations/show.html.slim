@@ -24,6 +24,14 @@ article
     ul
       li
         = link_to '→', organization_projects_path(@organization), title: 'View projects'
+  nav
+    ul
+      li
+        strong
+          | Logs
+    ul
+      li
+        = link_to '→', organization_logs_path(@organization), title: 'View projects'
   footer
     small
       strong

@@ -22,7 +22,8 @@ module Projects
       @integration.project = @project
 
       if @integration.save
-        redirect_to organization_project_path(@project.organization, @project), notice: 'Integration was successfully created.'
+        redirect_to organization_project_path(@project.organization, @project),
+                    notice: 'Integration was successfully created.'
       else
         render :new, status: :unprocessable_entity
       end
@@ -31,7 +32,7 @@ module Projects
     def update
       if @integration.update(integration_params)
         redirect_to project_project_path(@integration, @integration), notice: 'Integration was successfully updated.',
-                                                                        status: :see_other
+                                                                      status: :see_other
       else
         render :edit, status: :unprocessable_entity
       end

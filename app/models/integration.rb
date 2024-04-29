@@ -12,5 +12,9 @@ class Integration
 
   field :confirmed_at, type: Time
 
+  field :public_secret, type: String
+
   belongs_to :project
+
+  has_many :logs, dependent: :delete_all
 end

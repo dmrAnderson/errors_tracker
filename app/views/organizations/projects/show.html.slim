@@ -52,10 +52,16 @@ aside
                 sub
                   |< -
             article
-              | TODO
+              header
+                strong
+                  = integration.public_secret
+              - integration.logs.each do |log|
+                blockquote
+                  = log.body
+                  footer
+                    cite
+                      = human_date(log.created_at)
               footer
-                - if integration.confirmed_at?
-                  = button_to 'Reconfirm this integration', confirmation_path(integration), method: :patch
-                - else
+                - unless integration.confirmed_at?
                   = button_to 'Confirm this integration', integration_confirmations_path(integration), method: :post
-            = button_to 'Destroy this integration', integration, method: :delete, data: { turbo_confirm: 'Are you sure?' }
+                = button_to 'Destroy this integration', integration, method: :delete, data: { turbo_confirm: 'Are you sure?' }

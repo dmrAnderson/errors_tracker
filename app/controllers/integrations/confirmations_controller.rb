@@ -5,9 +5,6 @@ module Integrations
     before_action :set_integration
 
     def create
-    end
-
-    def update
       parts_of_url = URI.split(@integration.origin)
 
       begin
@@ -31,7 +28,9 @@ module Integrations
           request['User-Agent'] = 'rails_webhook_system/1.0'
 
           if http.request(request).code.to_i == 200
-            @integration.update!(confirmed_at: Time.now)
+            public_secret = SecureRandom.base58(24)
+
+            @integration.update!(confirmed_at: Time.current, public_secret:)
           end
 
           redirect_back(
@@ -44,7 +43,7 @@ module Integrations
     private
 
     def set_integration
-      @integration = Integration.find(params.require(:id))
+      @integration = Integration.find(params.require(:integration_id))
     end
   end
 end

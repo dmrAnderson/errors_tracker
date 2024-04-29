@@ -15,8 +15,11 @@ html[lang=I18n.locale]
       nav
         ul
           li
-            h1
-              | Errors Tracker
+            hgroup
+              h1
+                = link_to 'Errors Tracker', root_path
+              p
+                = current_organization.name
       - if notice.present?
         ins
           = notice
