@@ -13,9 +13,11 @@ class LogsJob < ApplicationJob
 
     webhook_payload ||= JSON.parse(inbound_webhook.body)
 
-    Log.create!(body: webhook_payload, integration:, project:, organization:)
+    log = Log.create!(body: webhook_payload, integration:, project:, organization:)
 
     inbound_webhook.update!(status: InboundWebhook::PROCESSED)
+
+    OutboundWebhookJob.perform_now(organization.id.to_s, log.attributes, 'logs', 'create')
   end
 
   private
