@@ -10,6 +10,7 @@ module Api
 
         before_action :burst_control
         before_action :sustained_control
+        before_action :authenticate_integration
 
         before_action do
           authenticate_token || not_found
@@ -26,15 +27,17 @@ module Api
 
         private
 
-        def integration
-          authenticate_with_http_token do |token, _options|
-            Integration.where.not(confirmed_at: nil).find_by!(public_secret: token)
-          end
-        end
-        alias authenticate_token integration
+        attr_reader :integration
 
-        def not_found
-          render(json: { error: 'Integration not found' }, status: :not_found)
+        def authenticate_integration
+          @integration = authenticate_with_http_token do |token, _|
+            Integration.find_by!(public_secret: token)
+          end
+
+          return head :not_found if integration.nil?
+          return head :unauthorized if integration.origin != request.referer
+
+          head :forbidden if integration.confirmed_at.nil?
         end
 
         def burst_control
