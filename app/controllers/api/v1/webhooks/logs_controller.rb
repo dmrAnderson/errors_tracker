@@ -8,6 +8,9 @@ module Api
 
         rescue_from Mongoid::Errors::DocumentNotFound, with: :not_found
 
+        before_action :burst_control
+        before_action :sustained_control
+
         before_action do
           authenticate_token || not_found
         end
@@ -32,6 +35,29 @@ module Api
 
         def not_found
           render(json: { error: 'Integration not found' }, status: :not_found)
+        end
+
+        def burst_control
+          rate_limiting(limit: 3, window: 6.seconds)
+        end
+
+        def sustained_control
+          rate_limiting(limit: 100, window: 1.hour)
+        end
+
+        def rate_limiting(limit:, window:)
+          cache_key = ["rate-limit", controller_path, action_name, request.remote_ip].compact.join(":")
+          count = cache_store.increment(cache_key, 1, expires_in: window)
+          remaining = [limit - count, 0].max
+          reset_time = (cache_store.send(:read_entry, cache_key, {})&.expires_at || Time.now + window).to_i
+
+          response.set_header('X-RateLimit-Limit', limit)
+          response.set_header('X-RateLimit-Remaining', remaining)
+          response.set_header('X-RateLimit-Reset', reset_time)
+
+          if count && count > limit
+            head :too_many_requests
+          end
         end
       end
     end

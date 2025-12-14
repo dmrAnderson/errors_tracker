@@ -3,7 +3,9 @@
 module Api
   module V1
     module Webhooks
-      class BaseController < ::ActionController::API
+      class BaseController < ApplicationController
+        skip_forgery_protection
+
         abstract!
 
         def create
