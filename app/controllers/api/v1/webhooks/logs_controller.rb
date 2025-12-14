@@ -12,10 +12,6 @@ module Api
         before_action :sustained_control
         before_action :authenticate_integration
 
-        before_action do
-          authenticate_token || not_found
-        end
-
         def create
           super do |record|
             LogsJob.perform_now(
@@ -35,7 +31,10 @@ module Api
           end
 
           return head :not_found if integration.nil?
-          return head :unauthorized if integration.origin != request.referer
+
+          if Rails.env.production?
+            return head :unauthorized if integration.origin != request.referer
+          end
 
           head :forbidden if integration.confirmed_at.nil?
         end
@@ -52,7 +51,7 @@ module Api
           cache_key = ["rate-limit", controller_path, action_name, request.remote_ip].compact.join(":")
           count = cache_store.increment(cache_key, 1, expires_in: window)
           remaining = [limit - count, 0].max
-          reset_time = (cache_store.send(:read_entry, cache_key, {})&.expires_at || Time.now + window).to_i
+          reset_time = (cache_store.send(:read_entry, cache_key).expires_at || Time.now + window).to_i
 
           response.set_header('X-RateLimit-Limit', limit)
           response.set_header('X-RateLimit-Remaining', remaining)

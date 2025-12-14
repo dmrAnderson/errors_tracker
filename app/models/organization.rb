@@ -14,6 +14,22 @@ class Organization
 
   field :sent_last_webhook_at, type: Time
 
+  field :webhook_events, type: Hash, default: {
+    logs: {
+      create: true
+    },
+    projects: {
+      create: true,
+      update: true,
+      destroy: true
+    },
+    integrations: {
+      create: true,
+      update: true,
+      destroy: true
+    }
+  }
+
   with_options dependent: :delete_all do
     has_many :projects
     has_many :outbound_webhook

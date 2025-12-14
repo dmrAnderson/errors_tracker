@@ -15,4 +15,14 @@
     = form.label :origin
     = form.url_field :origin
 
+  article
+    - form.object.class.new.webhook_events.each do |name, value|
+      strong
+        = name
+      div
+        - value.each do |nested_name, nested_value|
+          - input_name = "#{form.object_name}[webhook_events][#{name}][#{nested_name}]"
+          = check_box_tag input_name, true, form.object.webhook_events.fetch(name.to_s, {}).fetch(nested_name.to_s, false)
+          = label_tag input_name, nested_name
+
   = form.submit

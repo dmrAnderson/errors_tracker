@@ -11,6 +11,10 @@ class OutboundWebhookJob < ApplicationJob
 
     body = attributes.transform_values(&:to_s)
     kind = [controller_name, action_name].map { |item| item.to_s.downcase }.join('.')
+
+    subscription = organization.webhook_events.fetch(controller_name.to_s).fetch(action_name.to_s, false)
+    return unless subscription
+
     outbound_webhook = OutboundWebhook.create!(organization:, kind:, body:)
 
     if organization.sent_last_webhook_at && (organization.sent_last_webhook_at > Time.current - GAP_TIME)
